@@ -21,7 +21,10 @@ function assertBuildsSuccessfully(pathToEntry, expectedCode, env, done) {
         buildDir,
         env
     };
-    build({}, payload, () => {
+    build({}, payload, (err) => {
+        if (err) {
+            throw err;
+        }
         let generated = fs.readFileSync(path.join(payload.buildDir, 'espruino-generated.js')).toString();
         const tokens = esprima.tokenize(generated, {comment: true});
         const expectedTokens = esprima.tokenize(expectedCode, {comment: true});
